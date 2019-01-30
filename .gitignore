@@ -1,0 +1,12 @@
+.DS_Store
+
+### Emacs ###
+auto-save-list
+backups
+undohist
+straight
+init.el~
+recentf
+projectile-bookmarks.eld
+company-statistics-cache.el
+.lsp-session-v1
