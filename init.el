@@ -18,10 +18,10 @@
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
-(use-package use-package-hydra)
+;(use-package use-package-hydra)
 
 (use-package init-loader)
-;(setq init-loader-show-log-after-init 'error-only)
+(setq init-loader-show-log-after-init 'error-only)
 (init-loader-load "~/.emacs.d/inits")
 
 

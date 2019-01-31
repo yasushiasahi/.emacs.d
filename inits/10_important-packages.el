@@ -23,7 +23,7 @@
 ;;; @prettier-js
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package prettier-js
-  :hook ((css-mode scss-mode js2-mode typescript-mode web-mode) . prettier-js-mode)
+  :hook ((css-mode scss-mode js2-mode typescript-mode web-vue-mode) . prettier-js-mode)
   :config
   (setq prettier-js-args '(
 			   "--no-semi" "false"
@@ -42,6 +42,17 @@
 
 (use-package helm-swoop
   :bind(("C-c s". 'helm-swoop)))
+
+
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; @yasnippet
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package yasnippet
+  :hook (prog-mode . yas-minor-mode)
+  :config
+  (yas-reload-all))
+
+(use-package yasnippet-snippets)
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -66,9 +77,15 @@
   (define-key company-active-map (kbd "C-i") 'company-complete-selection) ;; TABで候補を設
   (define-key company-active-map [tab] 'company-complete-selection) ;; TABで候補を設定
   (define-key company-active-map (kbd "C-f") 'company-complete-selection) ;; C-fでも候補を設定
-  (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)) ;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
+  (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete) ;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
+  (push 'company-yasnippet company-backends)
+  (require 'company-css)
+  )
+
+
 
 (use-package company-statistics
+  :after company
   :config
   (company-statistics-mode))
 
@@ -86,6 +103,7 @@
 
 (use-package helm-company
   :after company)
+
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; @avy
@@ -125,14 +143,6 @@
   :config
   (helm-projectile-on))
 
-;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;;; @yasnippet
-;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package yasnippet
-  :hook (prog-mode . yas-minor-mode)
-  :config
-  (yas-reload-all))
-
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; @quickrun
@@ -146,19 +156,19 @@
 ;;; @open-junk-file
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package open-junk-file
-  :bind ("C-x C-z" . open-junk-file))
+  :bind ("C-c j" . open-junk-file))
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; @popwin
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package popwin
-  :after (quickrun google-translate)
   :config
   (popwin-mode 1)
   (push '("*Google Translate*" :height 0.4)  popwin:special-display-config)
+  (push '("*quickrun*" :height 0.3) popwin:special-display-config)
   ;(push '("godoc" :regexp t :height 0.4 :position top) popwin:special-display-config)
-  (push '("*quickrun*" :height 0.3) popwin:special-display-config))
+  )
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -168,6 +178,7 @@
 (use-package google-translate
   :bind ("C-c t" . google-translate-auto)
   :config
+  (require 'google-translate-default-ui)
   (defvar toggle-translate-flg nil
     "Toggle flg.")
 
