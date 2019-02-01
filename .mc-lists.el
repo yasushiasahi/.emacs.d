@@ -40,6 +40,7 @@
       '(
 	hydra-multiple-cursors/mc/mark-all-like-this-and-exit
 	hydra-multiple-cursors/mc/mark-next-like-this
+	hydra-multiple-cursors/mc/mark-previous-like-this
 	multiple-cursors-hydra/*
 	multiple-cursors-hydra/body
 	multiple-cursors-hydra/mc/edit-lines-and-exit

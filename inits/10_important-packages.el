@@ -78,11 +78,7 @@
   (define-key company-active-map [tab] 'company-complete-selection) ;; TABで候補を設定
   (define-key company-active-map (kbd "C-f") 'company-complete-selection) ;; C-fでも候補を設定
   (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete) ;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
-  (push 'company-yasnippet company-backends)
-  (require 'company-css)
   )
-
-
 
 (use-package company-statistics
   :after company
@@ -156,7 +152,10 @@
 ;;; @open-junk-file
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package open-junk-file
-  :bind ("C-c j" . open-junk-file))
+  :bind ("C-c j" . open-junk-file)
+  :config
+  (setq open-junk-file-find-file-function 'find-file)
+  )
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -226,3 +225,9 @@
 ;;; @flycheck
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package flycheck)
+
+
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; @restclient
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package restclient)
