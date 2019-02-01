@@ -26,8 +26,7 @@
   (push '("javascript" . "//") web-mode-comment-formats)
 
   (custom-set-faces
-   '(web-mode-html-tag-face ((t (:foreground "blue"))))
-   )
+   '(web-mode-html-tag-face ((t (:foreground "blue")))))
 
   (add-hook 'web-mode-hook #'(lambda ()
                                (enable-minor-mode '("\\.html\\'" . prettier-js-mode))
