@@ -23,7 +23,7 @@
 ;;; @prettier-js
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package prettier-js
-  :hook ((css-mode scss-mode js2-mode typescript-mode web-vue-mode) . prettier-js-mode)
+  :hook ((css-mode scss-mode js2-mode typescript-mode web-vue-mode typescript-mode) . prettier-js-mode)
   :config
   (setq prettier-js-args '(
 			   "--no-semi" "false"
