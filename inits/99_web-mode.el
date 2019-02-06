@@ -1,8 +1,13 @@
 (use-package web-mode
   :mode ("\\.html\\'" "\\.php\\'" "\\.mustache\\'" "\\.eex\\'")
   :init
-  (define-derived-mode web-vue-mode web-mode "WebVUE"
-    "Major mode for editing Web & VUE templates.\\{web-vue-map}")
+  (define-derived-mode web-vue-mode web-mode "WebVUE")
+  (define-derived-mode web-tsx-mode web-mode "WebTSX"
+    (setq web-mode-content-type "jsx")
+    (prettier-js-mode))
+  (define-derived-mode web-jsx-mode web-mode "WebJSX"
+    (setq web-mode-content-type "jsx")
+    (prettier-js-mode))
 
   :config
   (setq web-mode-attr-indent-offset nil)              ; 属性ごとのインデントを浅く
@@ -30,5 +35,12 @@
 
   (add-hook 'web-mode-hook #'(lambda ()
                                (enable-minor-mode '("\\.html\\'" . prettier-js-mode))
-                               (enable-minor-mode '("\\.php\\'" . prettier-js-mode))))
+                               (enable-minor-mode '("\\.php\\'" . prettier-js-mode))
+			       ;; (when (string-equal "jsx" (file-name-extension buffer-file-name))
+			       ;; 	 (setq web-mode-content-type "jsx")
+			       ;; 	 (prettier-js-mode))
+			       ;; (when (string-equal "tsx" (file-name-extension buffer-file-name))
+			       ;; 	 (setq web-mode-content-type "jsx")
+			       ;; 	 (prettier-js-mode))
+			       ))
   )
