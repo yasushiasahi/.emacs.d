@@ -44,3 +44,8 @@
 			       ;; 	 (prettier-js-mode))
 			       ))
   )
+
+(defun change-tsx-mode ()
+  (interactive)
+  (web-tsx-mode))
+(global-set-key (kbd "C-c m x") 'change-tsx-mode)
