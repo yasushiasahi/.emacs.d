@@ -1,6 +1,8 @@
 (use-package lsp-mode
   ;after (web-mode scss-mode)
-  :hook ((web-vue-mode js2-mode web-mode typescript-mode web-tsx-mode web-jsx-mode) . lsp)
+  :hook ((web-vue-mode js2-mode web-mode typescript-mode web-tsx-mode web-jsx-mode elixir-mode) . lsp)
+  :init
+  (add-to-list 'exec-path "/Users/asahi/dev/src/github.com/JakeBecker/elixir-ls/rel")
   :config
   (require 'lsp-clients)
   (lsp-register-client                                                                              ; web-vue-modeを-vue-language-serverに紐付け
