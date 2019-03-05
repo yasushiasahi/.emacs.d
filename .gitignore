@@ -2,7 +2,8 @@
 
 ### Emacs ###
 auto-save-list
-backups
+backups/*
+!backups/.gitkeep
 undohist
 straight
 init.el~
