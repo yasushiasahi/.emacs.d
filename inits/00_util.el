@@ -2,7 +2,7 @@
 ;;; 一般設定
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;; スタートアップメッセージを非表示
-(setq inhibit-startup-screen t) 
+(setq inhibit-startup-screen t)
 
 ;; yes/noはすべてy/nで答える
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -20,13 +20,26 @@
 (set-keyboard-coding-system 'utf-8)
 
 ;; メニューバー非表示
-(menu-bar-mode 0) 
+(menu-bar-mode 0)
 
 ;; スタートアップメッセージを非表示
-(setq inhibit-startup-screen t) 
+(setq inhibit-startup-screen t)
 
 ;; 入力補完
 (electric-pair-mode t) ; 閉じ括弧自動挿入
 
 ;; 画面からはみ出た文字を折り返さいない C-l で変更可能
 (setq-default truncate-lines t)
+
+;; コピペの設定darwin専用
+(defun copy-from-osx ()
+ (shell-command-to-string "pbpaste"))
+
+(defun paste-to-osx (text &optional push)
+ (let ((process-connection-type nil))
+     (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+       (process-send-string proc text)
+       (process-send-eof proc))))
+
+(setq interprogram-cut-function 'paste-to-osx)
+(setq interprogram-paste-function 'copy-from-osx)

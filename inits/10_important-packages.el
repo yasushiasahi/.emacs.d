@@ -105,7 +105,8 @@
 ;;; @avy
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package avy
-  :bind ("M-g g" . avy-goto-line)
+  :config
+  (global-set-key (kbd "M-g g") 'avy-goto-line)
   )
 
 
@@ -180,6 +181,10 @@
   (require 'google-translate-default-ui)
   (defvar toggle-translate-flg nil
     "Toggle flg.")
+
+  (defun google-translate--get-b-d1 ()
+    ;; TKK='427110.1469889687'
+  (list 427110 1469889687))
 
   (defun toggle-translate ()
     "Toggle translate function."

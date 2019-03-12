@@ -2,7 +2,7 @@
   ;after (web-mode scss-mode)
   :hook ((web-vue-mode js2-mode web-mode typescript-mode web-tsx-mode web-jsx-mode elixir-mode) . lsp)
   :init
-  (add-to-list 'exec-path "/Users/asahi/dev/src/github.com/JakeBecker/elixir-ls/rel")
+  (add-to-list 'exec-path "/Users/zero.asahi/dev/src/github.com/JakeBecker/elixir-ls/release")
   :config
   (require 'lsp-clients)
   (lsp-register-client                                                                              ; web-vue-modeを-vue-language-serverに紐付け
@@ -11,14 +11,14 @@
   		    :priority -1
   		    :ignore-messages '("readFile .*? requested by Vue but content not available")
   		    :server-id 'vls))
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection
-                                     (-const `(,lsp-clients-javascript-typescript-server
-                                               ,@lsp-clients-typescript-javascript-server-args)))
-                    :major-modes '(web-tsx-mode web-jsx-mode typescript-mode)
-                    :priority -3
-                    :ignore-messages '("readFile .*? requested by TypeScript but content not available")
-                    :server-id 'jsts-ls))
+  ;; (lsp-register-client
+  ;;  (make-lsp-client :new-connection (lsp-stdio-connection
+  ;;                                    (-const `(,lsp-clients-javascript-typescript-server
+  ;;                                              ,@lsp-clients-typescript-javascript-server-args)))
+  ;;                   :major-modes '(web-tsx-mode web-jsx-mode typescript-mode )
+  ;;                   :priority -3
+  ;;                   :ignore-messages '("readFile .*? requested by TypeScript but content not available")
+  ;;                   :server-id 'jsts-ls))
 
   (setq lsp-prefer-flymake nil)                                                                     ; flymakeではなくflycheckを使う
   )
