@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: vm.computed
+# key: cpd
+# --
+computed: {
+  $0
+},

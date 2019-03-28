@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: vm_method
+# key: mtd
+# --
+methods: {
+  $0
+},

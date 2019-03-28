@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: vm.filters
+# key: fil
+# --
+filters: {
+  $0
+}

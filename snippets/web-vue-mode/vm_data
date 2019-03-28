@@ -1,0 +1,8 @@
+# key: da
+# name: vm.data
+# --
+data() {
+  return {
+    $0
+  }
+}

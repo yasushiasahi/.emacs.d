@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: vm.watch
+# key: wth
+# --
+watch: {
+  $0
+},

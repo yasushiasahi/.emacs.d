@@ -7,7 +7,7 @@
 ;;; @goto-chg
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package goto-chg
-  :bind (("M-." . goto-last-change)
+  :bind (("C-M-_" . goto-last-change)
 	 ("M-," . goto-last-change-reverse)))
 
 
@@ -23,11 +23,12 @@
 ;;; @prettier-js
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package prettier-js
-  :hook ((css-mode scss-mode js2-mode typescript-mode web-vue-mode typescript-mode) . prettier-js-mode)
+  :hook ((css-mode scss-mode js2-mode typescript-mode typescript-mode) . prettier-js-mode)
   :config
-  (setq prettier-js-args '(
-			   "--no-semi" "false"
-			   "--jsx-bracket-same-line" "true"))
+  ;; (setq prettier-js-args '(
+  ;; 			   "--no-semi" "false"
+  ;; 			   ;"--jsx-bracket-same-line" "true"
+  ;; 			   "--trailing-comma" "all"))
   )
 
 
@@ -85,13 +86,13 @@
   :config
   (company-statistics-mode))
 
-(use-package company-lsp
-  :after company
-  :config
-  (push 'company-lsp company-backends)
-  (setq company-lsp-enable-snippet t
-        company-lsp-cache-candidates t)
-  )
+;; (use-package company-lsp
+;;   :after company
+;;   :config
+;;   (push 'company-lsp company-backends)
+;;   (setq company-lsp-enable-snippet t
+;;         company-lsp-cache-candidates t)
+;;   )
 
 (use-package company-go
   :after company
