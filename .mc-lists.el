@@ -3,7 +3,9 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+	crux-kill-whole-line
 	crux-move-beginning-of-line
+	crux-smart-open-line
 	crux-smart-open-line-above
 	helm-M-x
 	helm-show-kill-ring
