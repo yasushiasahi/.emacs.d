@@ -19,8 +19,14 @@
 (set-default-coding-systems 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-;; メニューバー非表示
-(menu-bar-mode 0)
+;; フォント
+(set-face-attribute 'default nil
+                   :family "Ricty Diminished"
+                   :height 140)
+
+(set-fontset-font
+ nil 'japanese-jisx0208
+ (font-spec :family "Ricty Diminished"))
 
 ;; スタートアップメッセージを非表示
 (setq inhibit-startup-screen t)
@@ -31,15 +37,22 @@
 ;; 画面からはみ出た文字を折り返さいない C-l で変更可能
 (setq-default truncate-lines t)
 
-;; コピペの設定darwin専用
-(defun copy-from-osx ()
- (shell-command-to-string "pbpaste"))
+(when (eq window-system 'ns)
+  (tool-bar-mode 0) ;toolbarを非表示
+  (scroll-bar-mode 0) ;scrollbarを非表示
+  )
 
-(defun paste-to-osx (text &optional push)
- (let ((process-connection-type nil))
-     (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-       (process-send-string proc text)
-       (process-send-eof proc))))
+(when (eq window-system 'nil)
+  ;; コピペの設定darwin専用
+  (defun copy-from-osx ()
+   (shell-command-to-string "pbpaste"))
 
-(setq interprogram-cut-function 'paste-to-osx)
-(setq interprogram-paste-function 'copy-from-osx)
+  (defun paste-to-osx (text &optional push)
+   (let ((process-connection-type nil))
+       (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+         (process-send-string proc text)
+         (process-send-eof proc))))
+
+  (setq interprogram-cut-function 'paste-to-osx)
+  (setq interprogram-paste-function 'copy-from-osx)
+  )

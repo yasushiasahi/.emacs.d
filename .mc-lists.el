@@ -13,6 +13,7 @@
 	kill-region
 	kill-sexp
 	mark-sexp
+	web-mode-element-vanish
 	))
 
 (setq mc/cmds-to-run-once
@@ -22,6 +23,7 @@
 	hydra-multiple-cursors/mc/mark-next-like-this
 	hydra-multiple-cursors/mc/mark-previous-like-this
 	hydra-multiple-cursors/mc/skip-to-next-like-this
+	hydra-window/windmove-up
 	multiple-cursors-hydra/*
 	multiple-cursors-hydra/body
 	))
