@@ -121,7 +121,7 @@
 (column-number-mode t) ; カラム番号を表示
 (size-indication-mode t) ; ファイスサイズを表示
 
-:: 現在行のハイライト
+;; 現在行のハイライト
 (global-hl-line-mode t)
 
 ;; 対応する括弧の強調表示
@@ -449,13 +449,7 @@
   ("4" (lambda ()
 	 "4分割"
 	 (interactive)
-	 (split-window-horizontally)
-	 (split-window-vertically)
-	 (setq i 0)
-	 (while (< i 1)
-	   (windmove-right)
-	   (split-window-vertically)
-	   (setq i (+ 1 i)))))
+	 (split-window-horizontally-n 4)))
   ("6" (lambda ()
 	 "6分割"
 	 (interactive)
