@@ -791,21 +791,11 @@
 ;;; multi-term
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package multi-term
+  :bind (("C-x t" . multi-term))
   :config
   (setq multi-term-program "/usr/local/bin/zsh")
   (add-to-list 'term-unbind-key-list '"M-x")
   (add-to-list 'term-unbind-key-list '"C-t")
-  :bind (:map term-mode-map
-	 ("C-p" . term-send-previous-line)
-	 ("C-n". term-send-next-line)
-	 ("C-b". term-send-backward-char)
-	 ("C-f". term-send-forward-char)
-	 ("C-h". term-send-backspace)
-	 ("C-y". term-paste)
-	 ("C-t 9". multi-term-next)
-	 ("C-t 8". multi-term-prev)
-	 ("C-t c". multi-term)
-	 )
   )
 
 
