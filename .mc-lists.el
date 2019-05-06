@@ -13,6 +13,7 @@
 	kill-region
 	kill-sexp
 	mark-sexp
+	typescript-insert-and-indent
 	web-mode-element-vanish
 	))
 

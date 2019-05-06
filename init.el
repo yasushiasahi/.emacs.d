@@ -81,9 +81,13 @@
 ;;; ++++++++++>+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; 環境変数
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package exec-path-from-shell)
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-copy-envs '("PATH" "MANPATH" "GOROOT" "GOPATH" "GOENV_SHELL" "LANG"))
+    )
+  )
+
 
 
 
@@ -535,17 +539,26 @@
   (define-key company-active-map [tab] 'company-complete-selection) ;; TABで候補を設定
   (define-key company-active-map (kbd "C-f") 'company-complete-selection) ;; C-fでも候補を設定
   (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete) ;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
+
+  (set-face-attribute 'company-tooltip-selection nil
+                  :foreground "#657b83" :background "#eee8d5")
+
+  ;; yasnippetとの連携
+  (defvar company-mode/enable-yas t
+    "Enable yasnippet for all backends.")
+  (defun company-mode/backend-with-yas (backend)
+    (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+	backend
+      (append (if (consp backend) backend (list backend))
+              '(:with company-yasnippet))))
+  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
   )
+
 
 (use-package company-statistics
   :after company
   :config
   (company-statistics-mode))
-
-(use-package company-go
-  :after company
-  (push 'company-go company-backends))
-
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -616,6 +629,13 @@
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; webmode for html php JSX TSX VUE
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+(use-package company-web
+  :bind (("C-c w" . company-web-html))
+  :config
+  (add-to-list 'company-backends 'company-web-html))
+
+
 (use-package web-mode
   :mode ("\\.html\\'" "\\.php\\'" "\\.mustache\\'" "\\.eex\\'")
   :init
@@ -760,6 +780,11 @@
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; go-mode
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package company-go
+  :config
+  (add-to-list 'company-backends 'company-go)
+  )
+(use-package go-eldoc)
 (use-package go-guru)
 (use-package go-mode
   :config
@@ -773,6 +798,7 @@
     (setq company-go-show-annotation t)
     (setq company-begin-commands '(self-insert-command))
     (flycheck-mode)
+    (yas-minor-mode)
     )
   (add-hook 'go-mode-hook 'setup-go-mode)
   )
@@ -791,7 +817,15 @@
 ;;; multi-term
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package multi-term
-  :bind (("C-x t" . multi-term))
+  :bind (("C-x t" . multi-term)
+	 :map term-raw-map
+         ("C-h" . term-send-backspace)
+         ("C-y" . term-paste)
+	 ("C-b" . term-send-left)
+         ("C-f" . term-send-right)
+         ("C-p" . previous-line)                    ; default
+         ("C-n" . next-line)                        ; default
+	 )
   :config
   (setq multi-term-program "/usr/local/bin/zsh")
   (add-to-list 'term-unbind-key-list '"M-x")
