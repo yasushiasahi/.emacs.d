@@ -50,8 +50,8 @@
  nil 'japanese-jisx0208
  (font-spec :family "Ricty Diminished"))
 
-;; 入力補完
-(electric-pair-mode t) ; 閉じ括弧自動挿入
+;; ;; 入力補完
+;; (electric-pair-mode t) ; 閉じ括弧自動挿入
 
 ;; 画面からはみ出た文字を折り返さいない C-l で変更可能
 (setq-default truncate-lines t)
@@ -76,6 +76,8 @@
   (setq interprogram-paste-function 'copy-from-osx)
   )
 
+;; scratchバッファの初期表示メッセージを出さない
+(setq initial-scratch-message "")
 
 
 ;;; ++++++++++>+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -569,7 +571,7 @@
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;;; @prettier-js
+;;; @rainbow-delimiters
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package rainbow-delimiters)
 
@@ -592,11 +594,20 @@
 (use-package flycheck)
 
 
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; @smartparens
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package smartparens
+  :config
+  (require 'smartparens-config)
+  (smartparens-global-mode)
+  )
+
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; add-node-modules-path
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package add-node-modules-path  )
+(use-package add-node-modules-path)
 
 
 
@@ -624,6 +635,34 @@
 ;; (use-package lsp-ui :commands lsp-ui-mode)
 ;; (use-package company-lsp :commands company-lsp)
 
+
+
+
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; @emacs-lisp-mode
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;; emacs-lisp-mode
+(defun elisp-mode-hooks ()
+  "Lisp-mode-hooks"
+  (rainbow-delimiters-mode)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-d") 'lispxmp)
+  )
+(add-hook 'emacs-lisp-mode-hook 'elisp-mode-hooks)
+
+(require 'cl-lib)
+
+
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; common lisp
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package sly
+  :config
+  (setq inferior-lisp-program "/usr/local/bin/clisp"))
+
+
+(add-hook 'lisp-mode-hook #'(lambda ()
+			       (rainbow-delimiters-mode)
+			       ))
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
