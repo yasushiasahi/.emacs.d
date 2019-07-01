@@ -14,6 +14,7 @@
 	kill-sexp
 	mark-sexp
 	typescript-insert-and-indent
+	web-mode-element-rename
 	web-mode-element-vanish
 	))
 

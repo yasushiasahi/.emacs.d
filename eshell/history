@@ -52,3 +52,17 @@ top
 w3m
 (setq eshell-visual-commands '("peco"))
 peco ${ghq list}
+ls
+ls -al
+gh
+clisp
+cd ../chapter_07/
+ls -al
+cat testfile.txt
+less testfile.txt
+ls -al
+ls -al
+ls -al
+rm wizard.dot.png wizard.dot
+ls -al
+ls -al
