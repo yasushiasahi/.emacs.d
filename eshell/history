@@ -1,0 +1,54 @@
+gh
+cd dev/src/bitbucket.org/karabinertech_pr39/pr39_client/
+ls -al
+git status
+ghq
+git pull
+npm run serve
+peco ghq
+peco ls
+peco ${ls}
+peco #(ls)
+ls -al
+ls
+ls -al
+cd ~/dev/src/bitbucket.org/karabinertech_pr39/pr39_client
+ls -al
+npm run serve
+cd ../pr39_app_ex
+docker container ls -a
+mix phx.server
+docker container restart psql
+mix phx.server
+git branch
+mix deps.get
+  uuid 1.1.8
+  sendgrid 1.8.0
+mix deps.get
+(+ 4 5)
+git statuse
+git status
+cd ~/Desktop
+ls -al | grep 10
+(+ 4 5)
+(with-corrent-buffer "output" (buffer-string))
+(with-current-buffer "output" (buffer-string))
+(with-current-buffer "scrach" (buffer-string))
+(with-current-buffer "*scrach*" (buffer-string))
+peco ${ls}
+echo ${pwd}
+pwd
+which peco
+ghq
+ghq list
+peco ${ghq list}
+(defun hello () '(hello world))
+(hello)
+hello
+(defun hello-to (word) `(hello ,word))
+(hello-to "world")
+(hello-to 'world)
+top
+w3m
+(setq eshell-visual-commands '("peco"))
+peco ${ghq list}
