@@ -7,12 +7,15 @@
 	crux-move-beginning-of-line
 	crux-smart-open-line
 	crux-smart-open-line-above
+	forward-sexp
 	helm-M-x
 	helm-show-kill-ring
 	hydra-multiple-cursors/body
+	indent-for-tab-command
 	kill-region
 	kill-sexp
 	mark-sexp
+	typescript-insert-and-autoconvert-to-template
 	typescript-insert-and-indent
 	web-mode-element-rename
 	web-mode-element-vanish

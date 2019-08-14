@@ -66,3 +66,7 @@ ls -al
 rm wizard.dot.png wizard.dot
 ls -al
 ls -al
+gh
+git status
+cd dev/src/bitbucket.org/amkwaonpoint/apoint-app/
+git status

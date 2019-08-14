@@ -44,7 +44,7 @@
 ;; フォント
 (set-face-attribute 'default nil
                    :family "Ricty Diminished"
-                   :height 130)
+                   :height 160)
 
 (set-fontset-font
  nil 'japanese-jisx0208
@@ -389,14 +389,23 @@
 (use-package magit)
 
 
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; neotree
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package all-the-icons)
 
-
-
-
-
-
-
-
+(use-package neotree
+  ;; :init
+  ;; (setq-default neo-keymap-style 'concise)
+  :config
+  (setq neo-create-file-auto-open t)
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  ;; (bind-key [f8] 'neotree-toggle)
+  ;; (bind-key "RET" 'neotree-enter-hide neotree-mode-map)
+  ;; (bind-key "a" 'neotree-hidden-file-toggle neotree-mode-map)
+  ;; (bind-key "<left>" 'neotree-select-up-node neotree-mode-map)
+  ;; (bind-key "<right>" 'neotree-change-root neotree-mode-map)
+  )
 
 
 
@@ -419,6 +428,8 @@
 (define-key key-translation-map (kbd "C-h") (kbd "<DEL>")) ; C-hでバックスペース
 
 
+
+
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; ウィンドウ操作
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -429,8 +440,8 @@
     (split-window-horizontally))
   (balance-windows))
 
-
 (defhydra hydra-window ()
+  ("t" neotree-toggle)
   ("b" windmove-left)
   ("n" windmove-down)
   ("p" windmove-up)
@@ -601,6 +612,7 @@
   :config
   (require 'smartparens-config)
   (smartparens-global-mode)
+  (sp-local-pair 'typescript-mode "<" ">")
   )
 
 
@@ -628,14 +640,29 @@
   )
 
 
+
+
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; lsp
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;; (use-package lsp-mode :commands lsp)
-;; (use-package lsp-ui :commands lsp-ui-mode)
-;; (use-package company-lsp :commands company-lsp)
+(use-package lsp-mode
+  :commands lsp
+  :config
+  ;(setq lsp-prefer-flymake nil)
+  )
+
+(use-package company-lsp
+  :commands company-lsp)
+
+;; (use-package lsp-ui
+;;   :commands lsp-ui-mode)
+;; (add-hook 'vue-mode-hook 'flycheck-mode)
 
 
+(use-package posframe)
+(use-package flymake-posframe
+  :straight (flymake-posframe :type git :host github :repo "Ladicle/flymake-posframe")
+  :hook (flymake-mode . flymake-posframe-mode))
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -678,7 +705,7 @@
 (use-package web-mode
   :mode ("\\.html\\'" "\\.php\\'" "\\.mustache\\'" "\\.eex\\'")
   :init
-  (define-derived-mode web-vue-mode web-mode "WebVUE")
+  (define-derived-mode vue-mode web-mode "vue-mode")
   (define-derived-mode web-jsx-mode web-mode "WebJSX"
     (setq web-mode-content-type "jsx"))
 
@@ -707,7 +734,7 @@
 
   (defun change-vue-mode ()
     (interactive)
-    (web-vue-mode))
+    (vue-mode))
 
   (add-hook 'web-mode-hook #'(lambda ()
                                (enable-minor-mode '("\\.html\\'" . prettier-js-mode))
@@ -716,10 +743,12 @@
 			       (rainbow-delimiters-mode)
 			       ))
 
-  (add-hook 'web-vue-mode-hook #'(lambda ()
+  (add-hook 'vue-mode-hook #'(lambda ()
                                (add-node-modules-path)
+			       ;(lsp)
 			       (setup-tide-mode)
 			       (prettier-js-mode)
+			       (flycheck-add-mode 'javascript-eslint 'vue-mode)
 			       (yas-minor-mode)
 			       (rainbow-delimiters-mode)
 			       ))
@@ -732,23 +761,21 @@
 			       (yas-minor-mode)
 			       (rainbow-delimiters-mode)
 			       ))
-
-  ;; (add-hook 'web-vue-mode-hook #'add-node-modules-path)
-  ;; (add-hook 'web-vue-mode-hook #'prettier-js-mode)
-  ;; (add-hook 'web-vue-mode-hook #'setup-tide-mode)
-
-  ;; (add-hook 'web-jsx-mode-hook #'add-node-modules-path)
-  ;; (add-hook 'web-jsx-mode-hook #'prettier-js-mode)
-  ;; (add-hook 'web-jsx-mode-hook #'setup-tide-mode)
   )
 
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-jsx-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-jsx-mode))
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-vue-mode))
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
 
 
 (global-set-key (kbd "C-c m x") 'change-jsx-mode)
 (global-set-key (kbd "C-c m v") 'change-vue-mode)
+
+
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; vue-mode
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 
 
@@ -787,8 +814,8 @@
   (setq js-indent-level 2)
   (setq js2-strict-missing-semi-warning nil)
   (add-hook 'js2-mode-hook #'(lambda ()
-                               (add-node-modules-path)
-			       (setup-tide-mode)
+                               ;(add-node-modules-path)
+			       ;(setup-tide-mode)
 			       (prettier-js-mode)
 			       (yas-minor-mode)
 			       (rainbow-delimiters-mode)
