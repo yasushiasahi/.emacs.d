@@ -3,6 +3,7 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+	counsel-ag
 	crux-kill-whole-line
 	crux-move-beginning-of-line
 	crux-smart-open-line

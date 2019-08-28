@@ -205,45 +205,191 @@
 
 
 
-;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;;; @helm
-;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package helm
-  :init
-  (require 'helm-config)
-  :bind (("M-y". 'helm-show-kill-ring)
-	 ("M-x". 'helm-M-x)
-	 ("C-x C-b". 'helm-for-files)
-	 ("C-x C-i". 'helm-mini))
-  :config
-  (custom-set-variables
-   '(helm-truncate-lines t)
-   '(helm-delete-minibuffer-contents-from-point t)
-   '(helm-mini-default-sources '(helm-source-buffers-list
-				 helm-source-recentf
-				 helm-source-projectile-projects
-				 helm-source-ghq
-				 helm-source-files-in-current-dir)))
-  )
+;; ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;; ;;; @helm
+;; ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;; (use-package helm
+;;   :init
+;;   (require 'helm-config)
+;;   :bind (("M-y". 'helm-show-kill-ring)
+;; 	 ("M-x". 'helm-M-x)
+;; 	 ("C-x C-b". 'helm-for-files)
+;; 	 ("C-x C-i". 'helm-mini))
+;;   :config
+;;   (custom-set-variables
+;;    '(helm-truncate-lines t)
+;;    '(helm-delete-minibuffer-contents-from-point t)
+;;    '(helm-mini-default-sources '(helm-source-buffers-list
+;; 				 helm-source-recentf
+;; 				 helm-source-projectile-projects
+;; 				 helm-source-ghq
+;; 				 helm-source-files-in-current-dir)))
+;;   )
 
+;; ;; (use-package helm-swoop
+;; ;;   :bind(("C-c s". 'helm-swoop)))
 ;; (use-package helm-swoop
-;;   :bind(("C-c s". 'helm-swoop)))
-(use-package helm-swoop
-  :straight (helm-swoop :type git :host github :repo "ashiklom/helm-swoop")
-  :bind(("C-c s". 'helm-swoop))
+;;   :straight (helm-swoop :type git :host github :repo "ashiklom/helm-swoop")
+;;   :bind(("C-c s". 'helm-swoop))
+;;   )
+
+
+
+;; (use-package helm-ghq
+;;   :bind(("C-x q". 'helm-ghq))
+;;   )
+
+;; (use-package wgrep)
+;; (use-package helm-git-grep
+;;   :bind (("C-c g g". 'helm-git-grep)
+;; 	 ("C-c g a". 'helm-git-grep-at-point))
+;;   )
+
+
+
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; @ivy
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package counsel
+  :config
+  (require 'ivy)
+  (use-package ivy-hydra
+    :config
+    (require 'ivy-hydra))
+
+  (setq ivy-count-format "(%d/%d) ")
+
+  ;; `ivy-switch-buffer' (C-x b) のリストに recent files と bookmark を含める．
+  (setq ivy-use-virtual-buffers t)
+
+  ;; ミニバッファでコマンド発行を認める
+  (when (setq enable-recursive-minibuffers t)
+    (minibuffer-depth-indicate-mode 1)) ;; 何回層入ったかプロンプトに表示．
+
+  ;; ESC連打でミニバッファを閉じる
+  (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
+
+  (setq ivy-height 40)
+  ; (setq ivy-fixed-height-minibuffer t)
+
+
+  (defun my-pre-prompt-function ()
+    (if window-system
+        (format "%s\n%s "
+                (make-string (frame-width) ?\x5F)	  ;; "__"
+                (all-the-icons-faicon "sort-amount-asc")) ;; ""
+      (format "%s\n" (make-string (1- (frame-width)) ?\x2D))))
+  (setq ivy-pre-prompt-function #'my-pre-prompt-function)
+
+
+  (defface my-ivy-arrow-visible
+    '((((class color) (background light)) :foreground "orange")
+      (((class color) (background dark)) :foreground "#EE6363"))
+    "Face used by Ivy for highlighting the arrow.")
+
+  (defface my-ivy-arrow-invisible
+    '((((class color) (background light)) :foreground "#FFFFFF")
+      (((class color) (background dark)) :foreground "#31343F"))
+    "Face used by Ivy for highlighting the invisible arrow.")
+
+  (if window-system
+      (when (require 'all-the-icons nil t)
+	(defun my-ivy-format-function-arrow (cands)
+          "Transform CANDS into a string for minibuffer."
+          (ivy--format-function-generic
+           (lambda (str)
+             (concat (all-the-icons-faicon
+                      "hand-o-right"
+                      :v-adjust -0.2 :face 'my-ivy-arrow-visible)
+                     " " (ivy--add-face str 'ivy-current-match)))
+           (lambda (str)
+             (concat (all-the-icons-faicon
+                      "hand-o-right" :face 'my-ivy-arrow-invisible) " " str))
+           cands
+           "\n"))
+	(setq ivy-format-functions-alist
+              '((t . my-ivy-format-function-arrow))))
+    (setq ivy-format-functions-alist '((t . ivy-format-function-arrow))))
+
+  (use-package all-the-icons-ivy
+    :config
+    (all-the-icons-ivy-setup))
+
+  (use-package ivy-rich
+    :config
+    (ivy-rich-mode 1))
+
+  (use-package counsel-ghq
+    :straight (counsel-ghq :type git :host github :repo "windymelt/counsel-ghq"))
+
+  (use-package counsel-projectile
+    :config
+    (counsel-projectile-mode))
+
+  (use-package counsel-osx-app)
+
+
+  (use-package ivy-ghq
+    :straight (ivy-ghq :type git :host github :repo "analyticd/ivy-ghq"))
+
+  ;; アクティベート
+  (ivy-mode 1)
+
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "M-y") 'counsel-yank-pop)
+  (global-set-key (kbd "C-M-z") 'counsel-fzf)
+  (global-set-key (kbd "C-M-r") 'counsel-recentf)
+  (global-set-key (kbd "C-x C-b") 'counsel-ibuffer)
+  (global-set-key (kbd "C-M-f") 'counsel-ag)
+
+  ;; アクティベート
+  (counsel-mode 1)
+
+  (global-set-key (kbd "M-s M-s") 'swiper-thing-at-point)
+
+  )
+
+(use-package prescient
+  :config
+  (setq prescient-aggressive-file-save t)
+
+  ;; ファイルの保存先
+  (setq prescient-save-file (expand-file-name "~/.emacs.d/prescient-save.el"))
+
+  ;; アクティベート
+  (prescient-persist-mode 1)
+
+  (use-package ivy-prescient)
+
+  ;; =ivy= の face 情報を引き継ぐ（ただし，完全ではない印象）
+  (setq ivy-prescient-retain-classic-highlighting t)
+
+  ;; コマンドを追加
+  ;; (dolist (command '(counsel-world-clock ;; Merged!
+  ;;                    counsel-app)) ;; add :caller
+  ;;   (add-to-list 'ivy-prescient-sort-commands command))
+
+  ;; フィルタの影響範囲を限定する．以下の3つは順番が重要．
+  ;; (1) マイナーモードの有効化
+  (ivy-prescient-mode 1)
+  ;; (2) =counsel-M-x= をイニシャル入力対応にする
+  (setf (alist-get 'counsel-M-x ivy-re-builders-alist)
+        #'ivy-prescient-re-builder)
+  ;; (3) デフォルトのイニシャル入力を上書きする
+  (setf (alist-get t ivy-re-builders-alist) #'ivy--regex-ignore-order)
   )
 
 
 
-(use-package helm-ghq
-  :bind(("C-x q". 'helm-ghq))
-  )
 
-(use-package wgrep)
-(use-package helm-git-grep
-  :bind (("C-c g g". 'helm-git-grep)
-	 ("C-c g a". 'helm-git-grep-at-point))
-  )
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; @which-key
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package which-key
+  :config
+  (which-key-mode))
+
+
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -253,13 +399,7 @@
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (projectile-global-mode)
-  (setq projectile-completion-system 'helm))
-
-(use-package helm-projectile
-  :config
-  (setq helm-projectile-fuzzy-match t)
-  (helm-projectile-on))
-
+  (setq projectile-completion-system 'ivy))
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -393,6 +533,8 @@
 ;;; neotree
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package all-the-icons)
+
+(use-package all-the-icons-dired)
 
 (use-package neotree
   ;; :init
@@ -706,7 +848,7 @@
   :mode ("\\.html\\'" "\\.php\\'" "\\.mustache\\'" "\\.eex\\'")
   :init
   (define-derived-mode vue-mode web-mode "vue-mode")
-  (define-derived-mode web-jsx-mode web-mode "WebJSX"
+  (define-derived-mode react-mode web-mode "React"
     (setq web-mode-content-type "jsx"))
 
   :config
@@ -754,21 +896,23 @@
 			       ))
 
 
-  (add-hook 'web-jsx-mode-hook #'(lambda ()
+  (add-hook 'react-mode-hook #'(lambda ()
                                (add-node-modules-path)
 			       (setup-tide-mode)
+			       (flycheck-add-mode 'javascript-eslint 'react-mode)
 			       (prettier-js-mode)
 			       (yas-minor-mode)
 			       (rainbow-delimiters-mode)
+			       (company-mode +1)
+			       (setq company-tooltip-align-annotations t)
 			       ))
   )
 
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-jsx-mode))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-jsx-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . react-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . react-mode))
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
 
-
-(global-set-key (kbd "C-c m x") 'change-jsx-mode)
+(global-set-key (kbd "C-c m x") 'change-react-mode)
 (global-set-key (kbd "C-c m v") 'change-vue-mode)
 
 
