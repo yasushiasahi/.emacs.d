@@ -16,6 +16,7 @@
 	kill-region
 	kill-sexp
 	mark-sexp
+	sp-remove-active-pair-overlay
 	typescript-insert-and-autoconvert-to-template
 	typescript-insert-and-indent
 	web-mode-element-rename
@@ -31,6 +32,7 @@
 	hydra-multiple-cursors/mc/mark-previous-like-this
 	hydra-multiple-cursors/mc/skip-to-next-like-this
 	hydra-window/windmove-up
+	mouse-set-region
 	multiple-cursors-hydra/*
 	multiple-cursors-hydra/body
 	))

@@ -113,7 +113,7 @@
 (use-package solarized-theme
   :config
   (load-theme 'solarized-dark t)
-  (setq solarized-high-contrast-mode-line t) ; make the modeline high contrast
+  ;; (setq solarized-high-contrast-mode-line t) ; make the modeline high contrast
   (setq x-underline-at-descent-line t)
   (setq solarized-emphasize-indicators nil) ; Use less colors for indicators such as git:gutter, flycheck and similar
   )
@@ -124,8 +124,9 @@
 (setq linum-format "%3d ")
 
 ;; モードライン
-(column-number-mode t) ; カラム番号を表示
-(size-indication-mode t) ; ファイスサイズを表示
+;;(column-number-mode t) ; カラム番号を表示
+;;(size-indication-mode t) ; ファイスサイズを表示
+(setq-default mode-line-format nil) 	;非表示
 
 ;; 現在行のハイライト
 (global-hl-line-mode t)
@@ -146,8 +147,8 @@
     (set-terminal-parameter nil 'background-mode 'dark)
     (load-theme 'solarized t))
 
-  (set-face-foreground 'mode-line "cyan") ; カレントバッファはシアン
-  (set-face-foreground 'mode-line-inactive "green") ; カレント以外のバッファは緑
+  ;; (set-face-foreground 'mode-line "cyan") ; カレントバッファはシアン
+  ;; (set-face-foreground 'mode-line-inactive "green") ; カレント以外のバッファは緑
 
   ;;リージョンの色
   (set-face-foreground 'region "white") ; 背景
@@ -205,48 +206,6 @@
 
 
 
-;; ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;; ;;; @helm
-;; ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;; (use-package helm
-;;   :init
-;;   (require 'helm-config)
-;;   :bind (("M-y". 'helm-show-kill-ring)
-;; 	 ("M-x". 'helm-M-x)
-;; 	 ("C-x C-b". 'helm-for-files)
-;; 	 ("C-x C-i". 'helm-mini))
-;;   :config
-;;   (custom-set-variables
-;;    '(helm-truncate-lines t)
-;;    '(helm-delete-minibuffer-contents-from-point t)
-;;    '(helm-mini-default-sources '(helm-source-buffers-list
-;; 				 helm-source-recentf
-;; 				 helm-source-projectile-projects
-;; 				 helm-source-ghq
-;; 				 helm-source-files-in-current-dir)))
-;;   )
-
-;; ;; (use-package helm-swoop
-;; ;;   :bind(("C-c s". 'helm-swoop)))
-;; (use-package helm-swoop
-;;   :straight (helm-swoop :type git :host github :repo "ashiklom/helm-swoop")
-;;   :bind(("C-c s". 'helm-swoop))
-;;   )
-
-
-
-;; (use-package helm-ghq
-;;   :bind(("C-x q". 'helm-ghq))
-;;   )
-
-;; (use-package wgrep)
-;; (use-package helm-git-grep
-;;   :bind (("C-c g g". 'helm-git-grep)
-;; 	 ("C-c g a". 'helm-git-grep-at-point))
-;;   )
-
-
-
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; @ivy
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -269,8 +228,9 @@
   ;; ESC連打でミニバッファを閉じる
   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
 
-  (setq ivy-height 40)
-  ; (setq ivy-fixed-height-minibuffer t)
+  (setq ivy-height 30)
+  (setq enable-recursive-minibuffers t)
+  (setq ivy-fixed-height-minibuffer t)
 
 
   (defun my-pre-prompt-function ()
@@ -313,14 +273,16 @@
 
   (use-package all-the-icons-ivy
     :config
+    (dolist (command '(counsel-projectile-switch-project
+                       counsel-ibuffer
+		       counsel-projectile-find-file
+		       ivy-ghq))
+      (add-to-list 'all-the-icons-ivy-buffer-commands command))
     (all-the-icons-ivy-setup))
 
   (use-package ivy-rich
     :config
     (ivy-rich-mode 1))
-
-  (use-package counsel-ghq
-    :straight (counsel-ghq :type git :host github :repo "windymelt/counsel-ghq"))
 
   (use-package counsel-projectile
     :config
@@ -328,9 +290,10 @@
 
   (use-package counsel-osx-app)
 
-
   (use-package ivy-ghq
     :straight (ivy-ghq :type git :host github :repo "analyticd/ivy-ghq"))
+
+
 
   ;; アクティベート
   (ivy-mode 1)
@@ -346,7 +309,6 @@
   (counsel-mode 1)
 
   (global-set-key (kbd "M-s M-s") 'swiper-thing-at-point)
-
   )
 
 (use-package prescient
@@ -869,6 +831,7 @@
   (setq web-mode-comment-style 2)                     ; pnpとかのコメントのスタイルがいい感じに
 
   (push '("javascript" . "//") web-mode-comment-formats)
+  (push '("jsx" . "//") web-mode-comment-formats)
 
   (defun change-jsx-mode ()
     (interactive)
@@ -905,7 +868,7 @@
 			       (rainbow-delimiters-mode)
 			       (company-mode +1)
 			       (setq company-tooltip-align-annotations t)
-			       ))
+			       (setq web-mode-enable-auto-quoting nil)))
   )
 
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . react-mode))
