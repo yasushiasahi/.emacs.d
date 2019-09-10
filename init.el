@@ -124,9 +124,20 @@
 (setq linum-format "%3d ")
 
 ;; モードライン
-;;(column-number-mode t) ; カラム番号を表示
-;;(size-indication-mode t) ; ファイスサイズを表示
-(setq-default mode-line-format nil) 	;非表示
+;; (column-number-mode t) ; カラム番号を表示
+;; (size-indication-mode t) ; ファイスサイズを表示
+;; (setq-default mode-line-format t) 	;非表示
+ (use-package doom-modeline
+      :custom
+      (doom-modeline-buffer-file-name-style 'truncate-with-project)
+      (doom-modeline-icon t)
+      (doom-modeline-major-mode-icon nil)
+      (doom-modeline-minor-modes nil)
+      :hook
+      (after-init . doom-modeline-mode)
+      :config
+      (line-number-mode 0)
+      (column-number-mode 0))
 
 ;; 現在行のハイライト
 (global-hl-line-mode t)
@@ -273,9 +284,14 @@
 
   (use-package all-the-icons-ivy
     :config
-    (dolist (command '(counsel-projectile-switch-project
+    (dolist (command '(ivy-switch-buffer
                        counsel-ibuffer
+		       counsel-find-file
+		       counsel-file-jump
+		       counsel-recentf
+		       counsel-projectile-switch-project
 		       counsel-projectile-find-file
+		       counsel-projectile-find-dir
 		       ivy-ghq))
       (add-to-list 'all-the-icons-ivy-buffer-commands command))
     (all-the-icons-ivy-setup))
@@ -486,17 +502,28 @@
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;;; magit
+;;; @magit
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package magit)
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;;; neotree
+;;; @all-the-icons
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package all-the-icons)
+(use-package all-the-icons
+  :config
+  (add-to-list 'all-the-icons-icon-alist
+   		   '("\\.tsx$"
+   		     all-the-icons-alltheicon "react"
+   		     :height 1.0
+   		     :face all-the-icons-blue)))
 
 (use-package all-the-icons-dired)
+
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; @neotree
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 (use-package neotree
   ;; :init
@@ -833,7 +860,7 @@
   (push '("javascript" . "//") web-mode-comment-formats)
   (push '("jsx" . "//") web-mode-comment-formats)
 
-  (defun change-jsx-mode ()
+  (defun change-react-mode ()
     (interactive)
     (web-tsx-mode))
 
@@ -875,7 +902,7 @@
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . react-mode))
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
 
-(global-set-key (kbd "C-c m x") 'change-react-mode)
+(global-set-key (kbd "C-c m r") 'change-react-mode)
 (global-set-key (kbd "C-c m v") 'change-vue-mode)
 
 
