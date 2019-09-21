@@ -1,6 +1,7 @@
 ;;; init.el ---  -*- coding: utf-8 ; lexical-binding: t -*-
 ;;; Commentary:
 
+
 ;;; Code:
 ;; straightとuse-packageでコードを管理
 (defvar bootstrap-version)
@@ -43,12 +44,45 @@
 
 ;; フォント
 (set-face-attribute 'default nil
-                   :family "Ricty Diminished"
+                   :family "Cascadia Code"
                    :height 160)
 
 (set-fontset-font
  nil 'japanese-jisx0208
  (font-spec :family "Ricty Diminished"))
+
+;; リガチャ設定 https://github.com/tonsky/FiraCode/wiki/Emacs-instructions
+(when (window-system)
+  (set-frame-font "Cascadia Code"))
+(let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
+               (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
+               (36 . ".\\(?:>\\)")
+               (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
+               (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
+               (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
+               (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
+               (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+               (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
+               (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
+               (48 . ".\\(?:x[a-zA-Z]\\)")
+               (58 . ".\\(?:::\\|[:=]\\)")
+               (59 . ".\\(?:;;\\|;\\)")
+               (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
+               (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
+               (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
+               (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
+               (91 . ".\\(?:]\\)")
+               (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
+               (94 . ".\\(?:=\\)")
+               (119 . ".\\(?:ww\\)")
+               (123 . ".\\(?:-\\)")
+               (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
+               (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
+               )
+             ))
+  (dolist (char-regexp alist)
+    (set-char-table-range composition-function-table (car char-regexp)
+                          `([,(cdr char-regexp) 0 font-shape-gstring]))))
 
 ;; ;; 入力補完
 ;; (electric-pair-mode t) ; 閉じ括弧自動挿入
@@ -230,7 +264,7 @@
   (setq ivy-count-format "(%d/%d) ")
 
   ;; `ivy-switch-buffer' (C-x b) のリストに recent files と bookmark を含める．
-  (setq ivy-use-virtual-buffers t)
+  ;; (setq ivy-use-virtual-buffers t)
 
   ;; ミニバッファでコマンド発行を認める
   (when (setq enable-recursive-minibuffers t)
@@ -265,7 +299,7 @@
 
   (if window-system
       (when (require 'all-the-icons nil t)
-	(defun my-ivy-format-function-arrow (cands)
+  	(defun my-ivy-format-function-arrow (cands)
           "Transform CANDS into a string for minibuffer."
           (ivy--format-function-generic
            (lambda (str)
@@ -278,27 +312,21 @@
                       "hand-o-right" :face 'my-ivy-arrow-invisible) " " str))
            cands
            "\n"))
-	(setq ivy-format-functions-alist
+  	(setq ivy-format-functions-alist
               '((t . my-ivy-format-function-arrow))))
     (setq ivy-format-functions-alist '((t . ivy-format-function-arrow))))
 
-  (use-package all-the-icons-ivy
-    :config
-    (dolist (command '(ivy-switch-buffer
-                       counsel-ibuffer
-		       counsel-find-file
-		       counsel-file-jump
-		       counsel-recentf
-		       counsel-projectile-switch-project
-		       counsel-projectile-find-file
-		       counsel-projectile-find-dir
-		       ivy-ghq))
-      (add-to-list 'all-the-icons-ivy-buffer-commands command))
-    (all-the-icons-ivy-setup))
-
-  (use-package ivy-rich
-    :config
-    (ivy-rich-mode 1))
+  ;; (use-package all-the-icons-ivy
+  ;;   :config
+  ;;   (dolist (command '(ivy-switch-buffer
+  ;;                      counsel-ibuffer
+  ;; 		       counsel-find-file
+  ;; 		       counsel-file-jump
+  ;; 		       counsel-recentf
+  ;; 		       counsel-projectile
+  ;; 		       ivy-ghq))
+  ;;     (add-to-list 'all-the-icons-ivy-buffer-commands command))
+  ;;   (all-the-icons-ivy-setup))
 
   (use-package counsel-projectile
     :config
@@ -310,6 +338,30 @@
     :straight (ivy-ghq :type git :host github :repo "analyticd/ivy-ghq"))
 
 
+
+  (use-package all-the-icons-ivy
+    :config
+    (setq all-the-icons-ivy-file-commands '(counsel-find-file
+					    counsel-file-jump
+					    counsel-recentf
+					    counsel-projectile
+					    counsel-projectile-find-file
+					    counsel-projectile-find-dir
+					    ivy-switch-buffer
+					    ivy-ghq))
+    (setq all-the-icons-ivy-buffer-commands '(counsel-find-file
+					    counsel-file-jump
+					    counsel-recentf
+					    counsel-projectile
+					    counsel-projectile-find-file
+					    counsel-projectile-find-dir
+					    ivy-switch-buffer
+					    ivy-ghq))
+    (all-the-icons-ivy-setup))
+
+  (use-package ivy-rich
+    :config
+    (ivy-rich-mode 1))
 
   ;; アクティベート
   (ivy-mode 1)
@@ -324,7 +376,7 @@
   ;; アクティベート
   (counsel-mode 1)
 
-  (global-set-key (kbd "M-s M-s") 'swiper-thing-at-point)
+  (global-set-key (kbd "C-c s") 'swiper-thing-at-point)
   )
 
 (use-package prescient
@@ -862,7 +914,7 @@
 
   (defun change-react-mode ()
     (interactive)
-    (web-tsx-mode))
+    (react-mode))
 
   (defun change-vue-mode ()
     (interactive)
