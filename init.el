@@ -344,6 +344,7 @@
     (setq all-the-icons-ivy-file-commands '(counsel-find-file
 					    counsel-file-jump
 					    counsel-recentf
+					    counsel-ibuffer
 					    counsel-projectile
 					    counsel-projectile-find-file
 					    counsel-projectile-find-dir
@@ -352,6 +353,7 @@
     (setq all-the-icons-ivy-buffer-commands '(counsel-find-file
 					    counsel-file-jump
 					    counsel-recentf
+					    counsel-ibuffer
 					    counsel-projectile
 					    counsel-projectile-find-file
 					    counsel-projectile-find-dir
@@ -739,7 +741,7 @@
   (set-face-attribute 'company-tooltip-selection nil
                   :foreground "#657b83" :background "#eee8d5")
 
-  ;; yasnippetとの連携
+  ;; yasppetとの連携
   (defvar company-mode/enable-yas t
     "Enable yasnippet for all backends.")
   (defun company-mode/backend-with-yas (backend)
@@ -779,7 +781,8 @@
   (yas-reload-all))
 
 (use-package yasnippet-snippets)
-
+(use-package js-react-redux-yasnippets
+  :straight (js-react-redux-yasnippets :type git :host github :repo "sooqua/js-react-redux-yasnippets"))
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1085,8 +1088,13 @@
   )
 
 
-
-
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; @ediff
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;; コントロール用のバッファを同一フレーム内に表示
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;; diffのバッファを上下ではなく左右に並べる
+(setq ediff-split-window-function 'split-window-horizontally)
 
 
 
