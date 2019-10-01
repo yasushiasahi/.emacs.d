@@ -828,34 +828,23 @@
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;;; lsp
-;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package lsp-mode
-  :commands lsp
-  :config
-  ;(setq lsp-prefer-flymake nil)
-  )
-
-(use-package company-lsp
-  :commands company-lsp)
-
-;; (use-package lsp-ui
-;;   :commands lsp-ui-mode)
-;; (add-hook 'vue-mode-hook 'flycheck-mode)
-
-
-(use-package posframe)
-(use-package flymake-posframe
-  :straight (flymake-posframe :type git :host github :repo "Ladicle/flymake-posframe")
-  :hook (flymake-mode . flymake-posframe-mode))
-
-
-;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; git-gutter+
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package git-gutter+
+  :custom
+  (git-gutter+-modified-sign " ")
+  (git-gutter+-added-sign " ")
+  (git-gutter+-deleted-sign " ")
+  :custom-face
+  (git-gutter+-modified ((t (:background "#b58900"))))
+  (git-gutter+-added    ((t (:background "#2aa198"))))
+  (git-gutter+-deleted  ((t (:background "#d33682"))))
   :config
   (global-git-gutter+-mode))
+
+
+
+
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -864,7 +853,14 @@
 (use-package wgrep)
 
 
-
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; beacon
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(use-package beacon
+  :custom
+  (beacon-color "#ff00ff")
+  :config
+  (beacon-mode 1))
 
 
 
