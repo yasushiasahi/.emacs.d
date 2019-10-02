@@ -22,8 +22,8 @@ docker container restart psql
 mix phx.server
 git branch
 mix deps.get
-  uuid 1.1.8
-  sendgrid 1.8.0
+uuid 1.1.8
+sendgrid 1.8.0
 mix deps.get
 (+ 4 5)
 git statuse
@@ -70,3 +70,12 @@ gh
 git status
 cd dev/src/bitbucket.org/amkwaonpoint/apoint-app/
 git status
+ls
+ls -al
+gh
+gh
+cd dev/src/github.com/karabiner-inc/sharetruck/client/
+ls -al
+cat package.json 
+cat prettier.config.js 
+yarn dev

@@ -45,7 +45,7 @@
 ;; フォント
 (set-face-attribute 'default nil
                    :family "Cascadia Code"
-                   :height 160)
+                   :height 150)
 
 (set-fontset-font
  nil 'japanese-jisx0208
@@ -1080,7 +1080,7 @@
 ;;; Elixir
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 (use-package elixir-mode)
-(use-package alchemist)
+; (use-package alchemist)
 
 
 
@@ -1094,9 +1094,8 @@
          ("C-y" . term-paste)
 	 ("C-b" . term-send-left)
          ("C-f" . term-send-right)
-         ("C-p" . previous-line)                    ; default
-         ("C-n" . next-line)                        ; default
-	 )
+         ("C-p" . previous-line)
+         ("C-n" . next-line))
   :config
   (setq multi-term-program "/usr/local/bin/zsh")
   (add-to-list 'term-unbind-key-list '"M-x")
