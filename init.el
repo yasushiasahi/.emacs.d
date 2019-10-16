@@ -154,8 +154,13 @@
 
 ;; 左端に行番号を表示
 (require 'linum)
-(global-linum-mode t)
 (setq linum-format "%3d ")
+(defun zero-asahi-toggle-linum ()
+  (interactive)
+  (if linum-mode
+      (linum-mode -1)
+    (linum-mode)))
+(global-set-key (kbd "C-c n") 'zero-asahi-toggle-linum)
 
 ;; モードライン
 ;; (column-number-mode t) ; カラム番号を表示
@@ -552,7 +557,8 @@
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; @restclient
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package restclient)
+(use-package restclient
+  :mode ("\\.http\\'"))
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1115,6 +1121,11 @@
   (setq multi-term-program "/usr/local/bin/zsh")
   (add-to-list 'term-unbind-key-list '"M-x")
   (add-to-list 'term-unbind-key-list '"C-t")
+  (add-hook 'term-mode-hook #'(lambda ()
+				(face-remap-add-relative 'default :height 125)
+			        (add-hook 'after-change-major-mode-hook
+					  (lambda () (linum-mode 0))
+					  :append :local)))
   )
 
 

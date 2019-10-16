@@ -22,6 +22,7 @@
 	typescript-insert-and-indent
 	web-mode-element-rename
 	web-mode-element-vanish
+	web-mode-element-wrap
 	))
 
 (setq mc/cmds-to-run-once
