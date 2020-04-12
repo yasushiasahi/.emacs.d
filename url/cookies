@@ -3,7 +3,7 @@
 
 (setq url-cookie-storage
  '((".google.com"
-  [url-cookie "NID" "188=BspHbhK28MVz-CS1tFVRx02HwA011z8tdpZIH5OPz4TrXHV9yNAJB1eEYcJ_vctJ_kAczAOd1M3a3WFJgLHmYe4bANs1XFziYUjHU6lqtMM6scOxrwWA7Z4ulhuFkCC62ST1OFECh769AdCEDtIiro72QntdOUsEGJHT4lYuLng" "Sun, 02-Feb-2020 13:50:46 GMT" "/" ".google.com" nil]))
+  [url-cookie "NID" "197=GGaQeP8AIY9IGLckcXJAb5xm5BG34Oiln2BxwtlFhYpGin4FMatYZGZcEpefPZFfXKvg_kO_3Fg_zqj40_-T3aZWhrj9Q8r9JS7dM6DTXIplugYr_2gUzDWVNK-vH7XR_TypaiRVlEn_5vyR8uT3in0fgArOVNSSC6pZFV6RLBU" "Fri, 07-Aug-2020 13:54:33 GMT" "/" ".google.com" nil]))
 )
 (setq url-cookie-secure-storage
  'nil)

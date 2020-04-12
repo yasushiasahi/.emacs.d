@@ -7,7 +7,7 @@
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
+      (bootstrap-codeversion 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
@@ -166,17 +166,19 @@
 ;; (column-number-mode t) ; カラム番号を表示
 ;; (size-indication-mode t) ; ファイスサイズを表示
 ;; (setq-default mode-line-format t) 	;非表示
- (use-package doom-modeline
-      :custom
-      (doom-modeline-buffer-file-name-style 'truncate-with-project)
-      (doom-modeline-icon t)
-      (doom-modeline-major-mode-icon nil)
-      (doom-modeline-minor-modes nil)
-      :hook
-      (after-init . doom-modeline-mode)
-      :config
-      (line-number-mode 0)
-      (column-number-mode 0))
+
+
+;; (use-package doom-modeline
+;;   :custom
+;;   (doom-modeline-buffer-file-name-style 'truncate-with-project)
+;;   (doom-modeline-icon t)
+;;   (doom-modeline-major-mode-icon nil)
+;;   (doom-modeline-minor-modes nil)
+;;   :hook
+;;   (after-init . doom-modeline-mode)
+;;   :config
+;;   (line-number-mode 0)
+;;   (column-number-mode 0))
 
 ;; 現在行のハイライト
 (global-hl-line-mode t)
@@ -794,7 +796,11 @@
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; @flycheck
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package flycheck)
+(use-package flycheck
+  :config
+  (flycheck-add-mode 'javascript-eslint 'react-mode)
+  (flycheck-add-mode 'javascript-eslint 'typescript-mode))
+
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -965,14 +971,17 @@
 
   (add-hook 'react-mode-hook #'(lambda ()
                                (add-node-modules-path)
-			       (setup-tide-mode)
+			       ; (setup-tide-mode)
 			       (flycheck-add-mode 'javascript-eslint 'react-mode)
 			       (prettier-js-mode)
-			       (yas-minor-mode)
 			       (rainbow-delimiters-mode)
-			       (company-mode +1)
-			       (setq company-tooltip-align-annotations t)
-			       (setq web-mode-enable-auto-quoting nil)))
+			       (lsp)
+			       ;; (yas-minor-mode)
+
+			       ;; (company-mode +1)
+			       ;; (setq company-tooltip-align-annotations t)
+			       ;; (setq web-mode-enable-auto-quoting nil)
+			       ))
   )
 
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . react-mode))
@@ -984,8 +993,43 @@
 
 
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;;; react-mode
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . react-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . react-mode))
+
+(setq lsp-keymap-prefix "s-l")
+(setq lsp-eslint-server-command
+   '("node"
+     "/Users/zero.asahi/.vscode/extensions/dbaeumer.vscode-eslint-2.1.1/server/out/eslintServer.js"
+     "--stdio"))
+
+(use-package lsp-mode
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         ;; (typescript-mode . lsp)
+         ;; (react-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package company-lsp :commands company-lsp)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+;; optional if you want which-key integration
+(use-package which-key
+  :config
+  (which-key-mode))
+
+
+;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; vue-mode
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 
 
 
@@ -1043,13 +1087,13 @@
   :mode "\\.ts\\'"
   :config
   (setq typescript-indent-level 2) ;スペースは２つ、デフォルトは4
-  (add-hook 'typescript-mode-hook #'(lambda ()
-                               (add-node-modules-path)
-			       (setup-tide-mode)
-			       (prettier-js-mode)
-			       (yas-minor-mode)
-			       (rainbow-delimiters-mode)
-			       ))
+  ;; (add-hook 'typescript-mode-hook #'(lambda ()
+  ;;                              (add-node-modules-path)
+  ;; 			       (setup-tide-mode)
+  ;; 			       (prettier-js-mode)
+  ;; 			       (yas-minor-mode)
+  ;; 			       (rainbow-delimiters-mode)
+  ;; 			       ))
   )
 
 
@@ -1085,7 +1129,20 @@
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; Elixir
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(use-package elixir-mode)
+
+;; (use-package elixir-mode)
+;; (use-package lsp-mode
+;;   :hook (elixir-mode . lsp)
+;;   :commands lsp
+;;   :config
+;;   (setq lsp-clients-elixir-server-executable "/Users/zero.asahi/dev/src/github.com/JakeBecker/elixir-ls/release-1.7.0/language_server.sh")
+;;   )
+;; (use-package lsp-ui :commands lsp-ui-mode)
+;; (use-package company-lsp
+;;   :commands company-lsp
+;;   :config
+;;   (push 'company-lsp company-backends))
+
 ; (use-package alchemist)
 
 
